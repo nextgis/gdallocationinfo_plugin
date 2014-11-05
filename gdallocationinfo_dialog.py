@@ -23,12 +23,11 @@
 
 import os
 
-from PyQt4.QtGui import QDialog, QTableWidgetItem
+from PyQt4.QtGui import QDialog, QTableWidgetItem, QTreeWidgetItem, QAbstractItemView, QStandardItemModel, QStandardItem
 from PyQt4 import uic
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'gdallocationinfo_dialog_base.ui'))
-
 
 class GDALLocationInfoForm(QDialog, FORM_CLASS):
     def __init__(self, data, parent=None):
@@ -36,29 +35,32 @@ class GDALLocationInfoForm(QDialog, FORM_CLASS):
         super(GDALLocationInfoForm, self).__init__(parent)
         self.setupUi(self)
         
-        all_attr_count = 0;
-        for obj in data:
-            all_attr_count += len(data[obj])
-                
-        self.tableWidget.clear()
-        self.tableWidget.setHorizontalHeaderLabels([self.tr("Object"), self.tr("Attribute"), self.tr("Value")])
-        self.tableWidget.setRowCount(all_attr_count)
-        self.tableWidget.setColumnCount(3)
-        row = 0;
+        self.treeView.setSelectionBehavior(QAbstractItemView.SelectRows)
+        
+        model = QStandardItemModel()
+        model.setHorizontalHeaderLabels([self.tr('object/attribute'), self.tr('value')])
+        
+        self.treeView.setModel(model)
+        self.treeView.setUniformRowHeights(True)
+        
         
         for object_name, object_attrs in data.items():
-            object_name_item = QTableWidgetItem(object_name)
+            parent = QStandardItem(object_name)
             for attr_name, attr_value in object_attrs.items():
-                attr_name_item = QTableWidgetItem(attr_name)
-                attr_value_item = QTableWidgetItem(attr_value)
-                self.tableWidget.setItem(row, 0, object_name_item )
-                self.tableWidget.setItem(row, 1, attr_name_item )
-                self.tableWidget.setItem(row, 2, attr_value_item )
-                
-                row +=1
-         
-        self.tableWidget.horizontalHeader().setStretchLastSection(True)
-        #self.tableWidget.resizeRowsToContents()
-        #self.tableWidget.resizeColumnsToContents()
-        #self.tableWidget.horizontalHeader().setResizeMode(1, QHeaderView.Stretch)
-        #self.tableWidget.horizontalHeader().setResizeMode(2, QHeaderView.Stretch)
+                attr_name_item = QStandardItem(attr_name)
+                attr_value_item = QStandardItem(attr_value)
+                parent.appendRow([attr_name_item, attr_value_item])
+            model.appendRow(parent)
+            
+if __name__ == "__main__":
+    print "__main__"
+    import sys
+    from PyQt4.QtGui import QWidget, QApplication
+    app = QApplication(sys.argv)
+    #window = QWidget()
+    #window.show()
+    a = GDALLocationInfoForm({"a":{"asd1":"xcvsdfvss", "asd2":"xcvsdfvss", "asd3":"xcvsdfvss"}, "b":{"asd1":"xcvsdfvss", "asd2":"xcvsdfvss", "asd3":"xcvsdfvss"}})
+    a.show()
+    
+    sys.exit(app.exec_())
+    

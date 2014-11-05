@@ -10,7 +10,7 @@
 name=gdallocationinfo plugin
 qgisMinimumVersion=2.0
 description=get location info from gdallocationinfo
-version=0.2
+version=0.3
 author=nextgis.ru
 email=info@nextgis.ru
 
@@ -27,7 +27,7 @@ tags=
 homepage=
 tracker=
 repository=
-icon=icon.png
+icon=icons/icon.png
 # experimental flag
 experimental=True
 
