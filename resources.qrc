@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/plugins/AGSInfo" >
+        <file>icons/icon.png</file>
+        <file>icons/cursor.png</file>
+    </qresource>
+</RCC>
