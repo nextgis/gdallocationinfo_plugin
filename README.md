@@ -1,0 +1,2 @@
+gdallocationinfo_plugin
+=======================
